@@ -4,7 +4,7 @@ window.onload = () => {
     if (!localStorage.getItem('usuarioToken')) {
         window.location.href = 'index.html';
     } else {
-        buscarAlbuns(''); // Carrega tudo ao abrir a página
+        buscarAlbuns('');
     }
 };
 
@@ -13,7 +13,6 @@ document.getElementById('btn-sair').addEventListener('click', () => {
     window.location.href = 'index.html';
 });
 
-// A MÁGICA DA BUSCA: Evento acionado a cada letra digitada
 document.getElementById('campo-busca').addEventListener('input', (event) => {
     const termo = event.target.value;
     buscarAlbuns(termo);
@@ -21,7 +20,6 @@ document.getElementById('campo-busca').addEventListener('input', (event) => {
 
 async function buscarAlbuns(termo) {
     try {
-        // Envia o termo digitado para o back-end
         const resposta = await fetch(`${API_URL}/itens?busca=${termo}`, {
             headers: { 'Authorization': localStorage.getItem('usuarioToken') }
         });

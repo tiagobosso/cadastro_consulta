@@ -1,0 +1,17 @@
+{
+  "usuarios": [
+    {
+      "nome": "tiago",
+      "email": "tiago@gmail.com",
+      "senha": "12345"
+    }
+  ],
+  "itens": [
+    {
+      "id": 1787261247605,
+      "nome": "celular",
+      "descricao": "telemovel",
+      "valor": 1250
+    }
+  ]
+}

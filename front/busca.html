@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Álbuns</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Busca</div>
+        <div class="menu">
+            <a href="cadastro.html" class="link-menu">Ir para Cadastro</a>
+            <button id="btn-sair" class="btn-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="card list-section" style="width: 100%;">
+            <h2>Buscar Álbuns</h2>
+            <div class="input-group" style="margin-bottom: 20px;">
+                <input type="text" id="campo-busca" placeholder="Digite o ano, artista ou nome do álbum...">
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Artista</th>
+                            <th>Nacionalidade</th>
+                            <th>Álbum</th>
+                            <th>Ano</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-resultados">
+                        <!-- Resultados aparecem aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="busca.js"></script>
+</body>
+</html>

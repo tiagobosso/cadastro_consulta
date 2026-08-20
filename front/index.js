@@ -1,4 +1,3 @@
-// Função para alternar entre Login e Cadastro
 function toggleForms() {
     const loginBox = document.getElementById('login-box');
     const registerBox = document.getElementById('register-box');
@@ -7,14 +6,11 @@ function toggleForms() {
     registerBox.classList.toggle('hidden');
 }
 
-// URL falsa da sua API (substitua pela sua URL real depois)
 const API_URL = 'http://localhost:3000/api';
 
-// Lógica de Cadastro
 document.getElementById('register-form').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Impede a página de recarregar
-
-    // Pega os valores digitados
+    event.preventDefault(); 
+    
     const nome = document.getElementById('reg-nome').value;
     const email = document.getElementById('reg-email').value;
     const senha = document.getElementById('reg-senha').value;
@@ -22,7 +18,6 @@ document.getElementById('register-form').addEventListener('submit', async functi
     const dadosUsuario = { nome, email, senha };
 
     try {
-        // Envia os dados para a API
         const resposta = await fetch(`${API_URL}/cadastro`, {
             method: 'POST',
             headers: {
@@ -33,7 +28,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
 
         if (resposta.ok) {
             alert('Cadastro realizado com sucesso!');
-            toggleForms(); // Volta para a tela de login
+            toggleForms(); 
         } else {
             alert('Erro ao realizar o cadastro.');
         }
@@ -43,7 +38,6 @@ document.getElementById('register-form').addEventListener('submit', async functi
     }
 });
 
-// Lógica de Login
 document.getElementById('login-form').addEventListener('submit', async function (event) {
     event.preventDefault();
 
@@ -60,13 +54,11 @@ document.getElementById('login-form').addEventListener('submit', async function 
             },
             body: JSON.stringify(dadosLogin)
         });
-
-        // Dentro do seu script.js, na função de login:
+        
         if (resposta.ok) {
             const dados = await resposta.json();
             localStorage.setItem('usuarioToken', dados.token);
 
-            // Altere aqui:
             window.location.href = 'cadastro.html';
         }
 

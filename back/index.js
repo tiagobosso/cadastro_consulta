@@ -9,20 +9,11 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// ======================================================
-// CAMINHOS DOS ARQUIVOS JSON
-// ======================================================
-
 const arquivoUsuarios = path.join(__dirname, 'usuarios.json');
 const arquivoAlbuns = path.join(__dirname, 'albuns.json');
 
-// ======================================================
-// FUNÇÃO PARA LER OS ARQUIVOS JSON
-// ======================================================
-
 function lerArquivo(caminho) {
     if (!fs.existsSync(caminho)) {
-        // Cria uma estrutura inicial dependendo do arquivo
         const dadosIniciais =
             caminho === arquivoUsuarios
                 ? { usuarios: [] }
@@ -42,17 +33,11 @@ function lerArquivo(caminho) {
         return JSON.parse(conteudo);
     } catch (erro) {
         console.error('Erro ao ler o arquivo JSON:', erro);
-
-        // Caso o arquivo esteja vazio ou corrompido
         return caminho === arquivoUsuarios
             ? { usuarios: [] }
             : { itens: [] };
     }
 }
-
-// ======================================================
-// FUNÇÃO PARA SALVAR OS ARQUIVOS JSON
-// ======================================================
 
 function salvarArquivo(caminho, dados) {
     try {
@@ -66,9 +51,7 @@ function salvarArquivo(caminho, dados) {
     }
 }
 
-// ======================================================
-// MIDDLEWARE DE SEGURANÇA
-// ======================================================
+
 
 function verificarToken(req, res, next) {
     const token = req.headers['authorization'];
@@ -88,30 +71,24 @@ function verificarToken(req, res, next) {
     next();
 }
 
-// ======================================================
-// CADASTRO DE USUÁRIO
-// ======================================================
 
 app.post('/api/cadastro', (req, res) => {
     const { nome, email, senha } = req.body;
 
     const db = lerArquivo(arquivoUsuarios);
-
-    // Verifica se o e-mail já está cadastrado
+    
     if (db.usuarios.find(user => user.email === email)) {
         return res.status(400).json({
             erro: 'E-mail já cadastrado.'
         });
     }
 
-    // Adiciona o novo usuário
     db.usuarios.push({
         nome,
         email,
         senha
     });
 
-    // Salva no usuarios.json
     salvarArquivo(arquivoUsuarios, db);
 
     res.status(201).json({
@@ -119,16 +96,11 @@ app.post('/api/cadastro', (req, res) => {
     });
 });
 
-// ======================================================
-// LOGIN
-// ======================================================
-
 app.post('/api/login', (req, res) => {
     const { email, senha } = req.body;
 
     const db = lerArquivo(arquivoUsuarios);
 
-    // Procura um usuário com o e-mail e senha informados
     const usuario = db.usuarios.find(
         user => user.email === email && user.senha === senha
     );
@@ -147,10 +119,6 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// ======================================================
-// CADASTRAR ÁLBUM
-// ======================================================
-
 app.post('/api/itens', verificarToken, (req, res) => {
     const {
         artista,
@@ -159,17 +127,13 @@ app.post('/api/itens', verificarToken, (req, res) => {
         ano
     } = req.body;
 
-    // Verifica campos obrigatórios
     if (!artista || !nome_album) {
         return res.status(400).json({
             erro: 'Artista e Nome do Álbum são obrigatórios.'
         });
     }
-
-    // Lê o arquivo de álbuns
     const dados = lerArquivo(arquivoAlbuns);
 
-    // Cria o novo álbum
     const novoAlbum = {
         id: Date.now(),
         artista,
@@ -178,10 +142,8 @@ app.post('/api/itens', verificarToken, (req, res) => {
         ano
     };
 
-    // Adiciona o álbum
     dados.itens.push(novoAlbum);
 
-    // Salva no albuns.json
     salvarArquivo(arquivoAlbuns, dados);
 
     res.status(201).json({
@@ -190,24 +152,16 @@ app.post('/api/itens', verificarToken, (req, res) => {
     });
 });
 
-// ======================================================
-// LISTAR / PESQUISAR ÁLBUNS
-// ======================================================
-
 app.get('/api/itens', verificarToken, (req, res) => {
-    // Lê o arquivo de álbuns
     const dados = lerArquivo(arquivoAlbuns);
 
     let albuns = dados.itens;
-
-    // Recebe o termo de busca da URL
-    // Exemplo: /api/itens?busca=2015
     const termoBusca = req.query.busca;
 
     if (termoBusca) {
         const termo = termoBusca.toLowerCase();
 
-        // Filtra pelo nome, artista, ano ou nacionalidade
+
         albuns = albuns.filter(album =>
             String(album.artista)
                 .toLowerCase()
@@ -229,10 +183,6 @@ app.get('/api/itens', verificarToken, (req, res) => {
 
     res.status(200).json(albuns);
 });
-
-// ======================================================
-// INICIAR SERVIDOR
-// ======================================================
 
 app.listen(PORT, () => {
     console.log(
